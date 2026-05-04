@@ -3,43 +3,123 @@ package prog2.model;
 import prog2.vista.BiblioException;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 
 public class Dades implements InDades{
 
+    private LlistaExemplars LlistaExemplars;
+    private LlistaUsuaris LlistaUsuaris;
+    private LlistaPrestecs LlistaPrestecs;
+
+    private boolean usuariTePrestecsEndarrerits(Usuari user) {
+        Date ara = new Date();
+        Iterator<Prestec> itr = LlistaPrestecs.getArrayList().iterator();
+
+        while(itr.hasNext()){
+            Prestec p = itr.next();
+            if(p.getUsuari().equals(user) && !p.getRetornat() && p.getDataLimitRetorn().before(ara)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Dades(){
+        LlistaExemplars = new LlistaExemplars();
+        LlistaUsuaris = new LlistaUsuaris();
+        LlistaPrestecs = new LlistaPrestecs();
+    }
 
     @Override
     public void afegirExemplar(String id, String titol, String autor, boolean admetPrestecLlarg) throws BiblioException {
 
+        LlistaExemplars.afegir(new Exemplar(id, titol, autor, admetPrestecLlarg));
     }
 
     @Override
     public ArrayList<Exemplar> recuperaExemplars() {
-        return null;
+        return LlistaExemplars.getArrayList();
     }
 
     @Override
     public void afegirUsuari(String email, String nom, String adreca, boolean esEstudiant) throws BiblioException {
 
+        if(esEstudiant) {
+            LlistaUsuaris.afegir(new Estudiant(email, nom, adreca));
+        }else{
+            LlistaUsuaris.afegir(new Professor(email, nom, adreca));
+        }
     }
 
     @Override
     public ArrayList<Usuari> recuperaUsuaris() {
-        return null;
+        return LlistaUsuaris.getArrayList();
     }
 
     @Override
     public void afegirPrestec(int exemplarPos, int usuariPos, boolean esLlarg) throws BiblioException {
 
+        Exemplar exemplar = LlistaExemplars.getAt(exemplarPos);
+        Usuari user = LlistaUsuaris.getAt(usuariPos);
+
+        if(!exemplar.isDisponible()){
+            throw new BiblioException("Aquest exemplar no està disponible.");
+        }
+
+        if(!exemplar.getAdmetPrestecLlarg() && esLlarg){
+            throw new BiblioException("No es pot demanar aquest tipus de préstec");
+        }
+
+        if(usuariTePrestecsEndarrerits(user)){
+            throw new BiblioException("L'usuari té préstecs endarrerits...");
+        }
+
+        if(esLlarg){
+            if(user.getNumPrestecsLlargs() >= user.getMaxPrestecsLlargs()){
+                throw new BiblioException("Aquest usuari no pot demanar altre préstec llarg");
+            }
+            LlistaPrestecs.afegir(new PrestecLlarg(exemplar, user, new Date()));
+            user.setNumPrestecsLlargs(user.getNumPrestecsLlargs() + 1);
+        }else{
+            if(user.getNumPrestecsNormals() >= user.getMaxPrestecsNormals()){
+                throw new BiblioException("Aquest usuari no pot demanar altre préstec normal");
+                }
+            LlistaPrestecs.afegir(new PrestecNormal(exemplar, user, new Date()));
+            user.setNumPrestecsNormals(user.getNumPrestecsNormals() + 1);
+            }
+
+        exemplar.setDisponible(false);
     }
 
     @Override
     public void retornarPrestec(int position) throws BiblioException {
 
+        if(position < 0 || position >= LlistaPrestecs.getSize()){
+            throw new BiblioException("Aquesta posició no és vàlida");
+        }
+
+        Prestec prestec = LlistaPrestecs.getAt(position);
+
+        if(prestec.getRetornat()){
+            throw new BiblioException("Aquest préstec ya ha sigut retornat");
+        }
+
+        prestec.setRetornat(true);
+        prestec.getExemplar().setDisponible(true);
+
+        Usuari user = prestec.getUsuari();
+
+        if(prestec instanceof PrestecLlarg){
+            user.setNumPrestecsLlargs(user.getNumPrestecsLlargs() - 1);
+        }else{
+            user.setNumPrestecsNormals(user.getMaxPrestecsNormals() - 1);
+        }
     }
 
     @Override
     public ArrayList<Prestec> recuperaPrestecs() {
-        return null;
+        return LlistaPrestecs.getArrayList();
     }
 
     @Override
