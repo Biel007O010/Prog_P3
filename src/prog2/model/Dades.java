@@ -102,7 +102,7 @@ public class Dades implements InDades{
         Prestec prestec = LlistaPrestecs.getAt(position);
 
         if(prestec.getRetornat()){
-            throw new BiblioException("Aquest préstec ya ha sigut retornat");
+            throw new BiblioException("Aquest préstec ja ha sigut retornat");
         }
 
         prestec.setRetornat(true);
