@@ -7,5 +7,4 @@ public class LlistaPrestecs extends Llista<Prestec> implements Serializable {
     public LlistaPrestecs(){
         super();
     }
-
 }
