@@ -128,6 +128,13 @@ public abstract class Prestec implements InPrestec{
     @Override
     public void retorna() {
         this.retornat = true;
+        this.llibre.setDisponible(true);
+
+        if(this instanceof PrestecLlarg){
+            this.usuari.setNumPrestecsLlargs(this.usuari.getNumPrestecsLlargs() - 1);
+        }else{
+            this.usuari.setNumPrestecsNormals(this.usuari.getNumPrestecsNormals() - 1);
+        }
     }
 
     /**
@@ -144,9 +151,20 @@ public abstract class Prestec implements InPrestec{
     @Override
     public boolean prestecEndarrerit() {
         Date dataActual = new Date();
-        if (dataActual.after(this.dataLimit)){
+        if (dataActual.after(this.dataLimit) && !getRetornat()){
             return true;
         }
         return false;
+    }
+
+    public String toString(){
+        String tipus;
+        if(this instanceof PrestecLlarg){
+            tipus = "Llarg";
+        }else{
+            tipus = "Normal";
+        }
+        return "Nom: " + usuari.getNom() + "| Títol del llibre: " + llibre.getTitol() + "| Tipus: " + tipus;
+
     }
 }

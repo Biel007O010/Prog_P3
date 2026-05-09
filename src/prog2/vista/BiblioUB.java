@@ -63,10 +63,10 @@ public class BiblioUB {
     };
     
     // Declarem descripcions personalitzades per a les opcions del menú principal
-    static private String[] descMenuGestioPrestecs ={"Afegir Prestec",
-                                                     "Retornar Prestec",
-                                                     "Visualitzar Prestecs",
-                                                     "Visualitzar Prestecs no Retornats",
+    static private String[] descMenuGestioPrestecs ={"Afegir Préstec",
+                                                     "Retornar Préstec",
+                                                     "Visualitzar Préstecs",
+                                                     "Visualitzar Préstecs no Retornats",
                                                      "Sortir"};
 
     
@@ -146,6 +146,30 @@ public class BiblioUB {
     }
     
     private void menuGestioExemplars(Scanner sc) {
+
+        Menu<OpcionsMenuGestioExemplars> menuExemplars = new Menu<>("Menu Exemplars", OpcionsMenuGestioExemplars.values());
+
+        menuExemplars.setDescripcions(descMenuGestioExemplars);
+
+        OpcionsMenuGestioExemplars opcio;
+        do {
+            menuExemplars.mostrarMenu();
+            opcio = menuExemplars.getOpcio(sc);
+
+            switch(opcio) {
+                case MENU_GESTIO_EXEMPLARS_ADD:
+                    afegirExemplar(sc);
+                    break;
+
+                case MENU_GESTIO_EXEMPLARS_VIEW:
+                    showList("Llista d'exemplars", adaptador.recuperaExemplars());
+                    break;
+
+                case MENU_GESTIO_EXEMPLARS_EXIT:
+                    System.out.println("Tornant...");
+                    break;
+            }
+        } while(opcio != OpcionsMenuGestioExemplars.MENU_GESTIO_EXEMPLARS_EXIT);
     }
     
     /**
@@ -154,9 +178,63 @@ public class BiblioUB {
      */
     
     private void afegirExemplar(Scanner sc){
+
+        System.out.println("Afegint exemplar...");
+        try {
+            String id_, titol_, autor_, llarg;
+            boolean esLlarg_;
+            System.out.print("Id: ");
+            id_ = sc.nextLine();
+            System.out.print("Titol: ");
+            titol_ = sc.nextLine();
+            System.out.print("Autor: ");
+            autor_ = sc.nextLine();
+
+            boolean valid = false;
+            do{
+                System.out.print("Admet préstecs llargs? (S/N): ");
+                llarg = sc.nextLine();
+
+                if(llarg.equalsIgnoreCase("S") || llarg.equalsIgnoreCase("N")){
+                    valid = true;
+                }else{
+                    System.out.println("Error: '" + llarg + "' no és una opció vàlida. Introdueix \"S\" o \"N\".");
+                }
+            }while(!valid);
+
+            esLlarg_ = llarg.equalsIgnoreCase("S");
+
+            adaptador.afegirExemplar(id_, titol_, autor_, esLlarg_);
+            System.out.println("Exemplar afegit correctament");
+
+        }catch (BiblioException e){
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     private void menuGestioUsuaris(Scanner sc) {
+        Menu<OpcionsMenuGestioClients> menuClients = new Menu<>("Menu Clients", OpcionsMenuGestioClients.values());
+        menuClients.setDescripcions(descMenuGestioUsuaris);
+
+        OpcionsMenuGestioClients opcio;
+        do {
+            menuClients.mostrarMenu();
+            opcio = menuClients.getOpcio(sc);
+
+            switch(opcio) {
+                case MENU_GESTIO_USUARIS_ADD:
+                    afegirUsuari(sc);
+                    break;
+
+                case MENU_GESTIO_USUARIS_VIEW:
+                    showList("Llista usuaris", adaptador.recuperaUsuaris());
+                    break;
+
+                case MENU_GESTIO_USUARIS_EXIT:
+                    System.out.println("Tornant...");
+                    break;
+            }
+        } while(opcio != OpcionsMenuGestioClients.MENU_GESTIO_USUARIS_EXIT);
     }
     
     /**
@@ -165,9 +243,71 @@ public class BiblioUB {
      */
     
     private void afegirUsuari(Scanner sc){
+
+        System.out.println("Afegint usuari...");
+        try {
+            String email_, nom, adreca, resposta;
+            boolean esEstudiant;
+            System.out.print("Email: ");
+            email_ = sc.nextLine();
+            System.out.print("Nom: ");
+            nom = sc.nextLine();
+            System.out.print("Adreça: ");
+            adreca = sc.nextLine();
+
+            boolean valid = false;
+            do{
+                System.out.print("Es estudiant? (S/N): ");
+                resposta = sc.nextLine();
+
+                if(resposta.equalsIgnoreCase("S") || resposta.equalsIgnoreCase("N")){
+                    valid = true;
+                }else{
+                    System.out.println("Error: '" + resposta + "' no és una opció vàlida. Introdueix \"S\" o \"N\".");
+                }
+            }while(!valid);
+
+            esEstudiant = resposta.equalsIgnoreCase("S");
+
+            adaptador.afegirExemplar(email_, nom, adreca, esEstudiant);
+            System.out.println("Usuari afegit correctament");
+
+        }catch (BiblioException e){
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     private void menuGestioPrestecs(Scanner sc) {
+        Menu<OpcionsMenuGestioPrestecs> menuPrestecs = new Menu<>("Menu Préstecs", OpcionsMenuGestioPrestecs.values());
+        menuPrestecs.setDescripcions(descMenuGestioPrestecs);
+
+        OpcionsMenuGestioPrestecs opcio;
+        do {
+            menuPrestecs.mostrarMenu();
+            opcio = menuPrestecs.getOpcio(sc);
+
+            switch(opcio) {
+                case MENU_GESTIO_PRESTECS_ADD:
+                    afegirPrestec(sc);
+                    break;
+
+                case MENU_GESTIO_PRESTECS_REMOVE:
+                    cancelarPrestec(sc);
+                    break;
+
+                case MENU_GESTIO_PRESTECS_VIEW:
+                    showList("Llista de préstecs", adaptador.recuperaPrestecs());
+                    break;
+
+                case MENU_GESTIO_PRESTECS_VIEW_URG:
+                    showList("Llista de protects no retornats", adaptador.recuperaPrestecsNoRetornats());
+                    break;
+
+                case MENU_GESTIO_PRESTECS_EXIT:
+                    System.out.println("Tornant...");
+                    break;
+            }
+        } while(opcio != OpcionsMenuGestioPrestecs.MENU_GESTIO_PRESTECS_EXIT);
     }
     
     /**
@@ -176,9 +316,50 @@ public class BiblioUB {
      */
     
     private void afegirPrestec(Scanner sc){
+        System.out.println("Afegit préstec...");
+        try {
+            String resposta;
+            int exemplarPos, userPos;
+            boolean esLlarg;
+            System.out.print("Posició del exemplar: ");
+            exemplarPos = sc.nextInt();
+            System.out.print("Posició del usuari: ");
+            userPos = sc.nextInt();
+
+            boolean valid = false;
+            do{
+                System.out.print("Es un préstec llarg? (S/N): ");
+                resposta = sc.nextLine();
+
+                if(resposta.equalsIgnoreCase("S") || resposta.equalsIgnoreCase("N")){
+                    valid = true;
+                }else{
+                    System.out.println("Error: '" + resposta + "' no és una opció vàlida. Introdueix \"S\" o \"N\".");
+                }
+            }while(!valid);
+
+            esLlarg = resposta.equalsIgnoreCase("S");
+
+            adaptador.afegirPrestec(exemplarPos, userPos, esLlarg);
+            System.out.println("Préstec afegit correctament");
+
+        }catch (BiblioException e){
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     private void cancelarPrestec(Scanner sc){
+
+        System.out.println("Donau la posició del préstec que vols eliminar");
+
+        try{
+            int exemplarPos;
+            exemplarPos = sc.nextInt();
+            adaptador.retornarPrestec(exemplarPos);
+
+        }catch (BiblioException e){
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
      /**

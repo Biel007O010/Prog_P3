@@ -47,6 +47,10 @@ public class Dades implements InDades{
     @Override
     public void afegirPrestec(int exemplarPos, int usuariPos, boolean esLlarg) throws BiblioException {
 
+        if(exemplarPos < 0 || exemplarPos >= LlistaExemplars.getSize() || usuariPos < 0 || usuariPos >= LlistaUsuaris.getSize()){
+            throw new BiblioException("Una o dues de les posicions no són vàlides");
+        }
+
         Exemplar exemplar = LlistaExemplars.getAt(exemplarPos);
         Usuari user = LlistaUsuaris.getAt(usuariPos);
 
@@ -60,9 +64,9 @@ public class Dades implements InDades{
 
         Date ara = new Date();
         Iterator<Prestec> itr = LlistaPrestecs.getArrayList().iterator();
-        while (itr.hasNext()) {
+        while(itr.hasNext()){
             Prestec p = itr.next();
-            if (p.getUsuari().equals(user) && !p.getRetornat() && p.prestecEndarrerit()) {
+            if(p.getUsuari().equals(user) && !p.getRetornat() && p.prestecEndarrerit()){
                 throw new BiblioException("L'usuari té préstecs endarrerits y no puede pedir más.");
             }
         }
@@ -116,6 +120,16 @@ public class Dades implements InDades{
 
     @Override
     public ArrayList<Prestec> recuperaPrestecsNoRetornats() {
-        return null;
+
+        Iterator<Prestec> itr = LlistaPrestecs.getArrayList().iterator();
+        ArrayList<Prestec> noRetornats = new ArrayList<>();
+
+        while(itr.hasNext()){
+            Prestec p = itr.next();
+            if(!p.getRetornat()){
+                noRetornats.add(p);
+            }
+        }
+        return noRetornats;
     }
 }

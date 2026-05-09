@@ -67,7 +67,6 @@ public class Llista<T> implements Serializable, InLlista<T> {
      * Buidar tots el elements de la llista
      */
     public void clear() {
-
         llista.clear();
     }
 
@@ -75,7 +74,6 @@ public class Llista<T> implements Serializable, InLlista<T> {
      * Retornar true si la llista és buida
      */
     public boolean isEmpty() {
-
         return llista.isEmpty();
     }
 

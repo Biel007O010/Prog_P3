@@ -9,6 +9,12 @@ public class LlistaExemplars extends Llista<Exemplar> implements Serializable {
 
     public LlistaExemplars() {super();}
 
+    /**
+     * Metode para afegir un exemplar a la llista correspondent
+     * @param exemplar
+     * @throws BiblioException
+     */
+
     @Override
     public void afegir(Exemplar exemplar) throws BiblioException {
 
@@ -25,6 +31,12 @@ public class LlistaExemplars extends Llista<Exemplar> implements Serializable {
             llista.add(exemplar);
         }
     }
+
+    /**
+     * Metode per verificar si un llibre amb la mateixa ID ja existeix a la llista.
+     * @param id_
+     * @return
+     */
 
     public boolean contains(String id_){
 

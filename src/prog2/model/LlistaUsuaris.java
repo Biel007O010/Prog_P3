@@ -10,6 +10,11 @@ public class LlistaUsuaris extends Llista<Usuari> implements Serializable {
 
     public LlistaUsuaris(){super();}
 
+    /**
+     * Metode para afegir un usuari a la llista correspondent
+     * @param user
+     * @throws BiblioException
+     */
     public void afegir(Usuari user) throws BiblioException {
 
         if(user == null){
@@ -26,6 +31,11 @@ public class LlistaUsuaris extends Llista<Usuari> implements Serializable {
         }
     }
 
+    /**
+     * Metode per verificar si un usuari amb el mateix email ja existeix a la llista.
+     * @param email_
+     * @return
+     */
     public boolean contains(String email_){
 
         Iterator<Usuari> itr = this.llista.iterator();
