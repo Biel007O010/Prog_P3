@@ -12,19 +12,6 @@ public class Dades implements InDades{
     private LlistaUsuaris LlistaUsuaris;
     private LlistaPrestecs LlistaPrestecs;
 
-    private boolean usuariTePrestecsEndarrerits(Usuari user) {
-        Date ara = new Date();
-        Iterator<Prestec> itr = LlistaPrestecs.getArrayList().iterator();
-
-        while(itr.hasNext()){
-            Prestec p = itr.next();
-            if(p.getUsuari().equals(user) && !p.getRetornat() && p.getDataLimitRetorn().before(ara)){
-                return true;
-            }
-        }
-        return false;
-    }
-
     public Dades(){
         LlistaExemplars = new LlistaExemplars();
         LlistaUsuaris = new LlistaUsuaris();
@@ -71,8 +58,13 @@ public class Dades implements InDades{
             throw new BiblioException("No es pot demanar aquest tipus de préstec");
         }
 
-        if(usuariTePrestecsEndarrerits(user)){
-            throw new BiblioException("L'usuari té préstecs endarrerits...");
+        Date ara = new Date();
+        Iterator<Prestec> itr = LlistaPrestecs.getArrayList().iterator();
+        while (itr.hasNext()) {
+            Prestec p = itr.next();
+            if (p.getUsuari().equals(user) && !p.getRetornat() && p.prestecEndarrerit()) {
+                throw new BiblioException("L'usuari té préstecs endarrerits y no puede pedir más.");
+            }
         }
 
         if(esLlarg){
