@@ -2,6 +2,9 @@ package prog2.vista;
 
 import javax.swing.*;
 
+/**
+ * GUI DE L?APLICACIO
+ */
 public class AppBiblioUB extends JFrame {
     private JPanel panellAppBiblioUB;
 
