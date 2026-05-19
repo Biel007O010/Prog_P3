@@ -1,8 +1,9 @@
 package prog2.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public abstract class Prestec implements InPrestec{
+public abstract class Prestec implements InPrestec, Serializable {
     private Usuari usuari;
     private Exemplar llibre;
     private Date dataComanda;

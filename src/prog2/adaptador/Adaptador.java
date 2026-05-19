@@ -9,7 +9,7 @@ import prog2.model.Prestec;
 import prog2.model.Usuari;
 import prog2.vista.BiblioException;
 
-public class Adaptador {
+public class Adaptador implements Serializable {
     private Dades dades;
 
     /**

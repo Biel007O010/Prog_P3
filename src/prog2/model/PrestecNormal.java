@@ -1,8 +1,9 @@
 package prog2.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PrestecNormal extends Prestec{
+public class PrestecNormal extends Prestec implements Serializable {
     /**
      * Constructor de la classe, passa atributs a la classe superior
      * @param _llibre
