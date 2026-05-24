@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class afegirExemplar extends JFrame {
+public class afegirExemplar extends JDialog {
     private Adaptador adaptador;
     gestioExemplarsFinestra finestraAnterior;
     private JPanel panellAfegirExem;
@@ -21,11 +21,13 @@ public class afegirExemplar extends JFrame {
     private JLabel etiquetaID;
 
     public afegirExemplar(Adaptador a, gestioExemplarsFinestra f){
+        super(f);
         this.adaptador = a;
         this.finestraAnterior = f;
         setTitle("Afegir Exemplar");
         setContentPane(panellAfegirExem); //
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setModal(true);
         setSize(400, 300);
         setLocationRelativeTo(null);
         acceptarButton.addActionListener(new ActionListener() {

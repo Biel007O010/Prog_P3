@@ -21,7 +21,7 @@ public class gestioExemplarsFinestra extends JFrame {
         setTitle("Gestió dels Exemplars");
         setContentPane(panellGestioExemplars); //
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(400, 300);
+        setSize(550, 300);
         setLocationRelativeTo(null);
 
         actualitzaExemplars();

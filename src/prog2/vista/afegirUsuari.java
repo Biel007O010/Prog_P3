@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class afegirUsuari extends JFrame {
+public class afegirUsuari extends JDialog {
     private JPanel panellAfegirUsuari;
     private JButton acceptarButton;
     private JButton cancelarButton;
@@ -21,11 +21,13 @@ public class afegirUsuari extends JFrame {
     private gestioUsuarisFinestra finestraAnterior;
 
     public afegirUsuari(Adaptador a, gestioUsuarisFinestra f){
+        super(f);
         this.adaptador = a;
         this.finestraAnterior = f;
         setTitle("Afegir Usuari");
         setContentPane(panellAfegirUsuari);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setModal((true));
         setSize(400, 300);
         setLocationRelativeTo(null);
         cancelarButton.addActionListener(new ActionListener() {
