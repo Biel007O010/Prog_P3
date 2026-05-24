@@ -1,66 +1,118 @@
 package prog2.vista;
 
 import prog2.adaptador.Adaptador;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class gestioPrestecsFinestra extends JFrame{
-    private JPanel panellGestioFinestra;
-    private JButton sortirButton;
-    private JLabel etiquetaRegistre;
-    private JScrollPane panellPrestecsRegistrats;
-    private JList llistaPrestecs;
-    private Adaptador adaptador;
+public class gestioPrestecsFinestra extends JFrame {
     private JPanel panellGestioPrestecs;
+    private JScrollPane panellPrestecsRegistrats;
+    private JList<String> llistaPrestecs;
+    private JButton sortirButton;
     private JButton afegirPrestec;
     private JButton retornarPrestecButton;
+    private JButton noRetornatsButton;
+
+    private Adaptador adaptador;
+
+    private boolean mostrantNomésPendents = false;
 
     public gestioPrestecsFinestra(Adaptador a) {
         this.adaptador = a;
-        setTitle("Gestió dels Préstecs");
-        setContentPane(panellGestioPrestecs); //
+
+        setTitle("Gestió de Préstecs - Biblioteca UB");
+        setContentPane(panellGestioPrestecs);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(400, 300);
+        setSize(600, 450);
         setLocationRelativeTo(null);
-
-        actualitzaPrestecs();
-
-        sortirButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gestioPrestecsFinestra.this.dispose();
-            }
-        });
-        afegirPrestec.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                afegirPrestec afegir = new afegirPrestec(adaptador, gestioPrestecsFinestra.this);
-                afegir.setVisible(true);
-            }
-        });
-
         actualitzaPrestecs();
 
         retornarPrestecButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                retornarPrestecFinestra finestraRetorn = new retornarPrestecFinestra(adaptador, gestioPrestecsFinestra.this);
-                finestraRetorn.setVisible(true);
+                int prestecSeleccionat = llistaPrestecs.getSelectedIndex();
+
+                if (prestecSeleccionat == -1) {
+                    JOptionPane.showMessageDialog(gestioPrestecsFinestra.this,
+                            "Si us plau, selecciona un préstec de la llista per retornar-lo.",
+                            "Avís",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                try {
+                    int posicionGlobalReal = prestecSeleccionat;
+
+                    if (mostrantNomésPendents) {
+                        String textSeleccionat = llistaPrestecs.getSelectedValue();
+                        posicionGlobalReal = adaptador.recuperaPrestecs().indexOf(textSeleccionat);
+                    }
+
+                    adaptador.retornarPrestec(posicionGlobalReal);
+                    actualitzaPrestecs();
+
+                    JOptionPane.showMessageDialog(gestioPrestecsFinestra.this,
+                            "Préstec retornat correctament.",
+                            "Èxit",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                } catch (BiblioException ex) {
+                    JOptionPane.showMessageDialog(gestioPrestecsFinestra.this,
+                            ex.getMessage(),
+                            "Error al retornar",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        noRetornatsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostrantNomésPendents = !mostrantNomésPendents;
+
+                if (mostrantNomésPendents) {
+                    noRetornatsButton.setText("Veure Tots");
+                } else {
+                    noRetornatsButton.setText("Veure No Retornats");
+                }
+
                 actualitzaPrestecs();
             }
         });
-    }
-    public void actualitzaPrestecs(){
-        DefaultListModel<String> llista = new DefaultListModel<>();
-        ArrayList<String> prestecsString = adaptador.recuperaPrestecs();
 
-        for (String prestec: prestecsString){
-            llista.addElement(prestec);
+        afegirPrestec.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                afegirPrestec afegirP = new afegirPrestec(adaptador, gestioPrestecsFinestra.this);
+                afegirP.setVisible(true);
+            }
+        });
+
+        sortirButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+    }
+
+    protected void actualitzaPrestecs() {
+        DefaultListModel<String> llistaModel = new DefaultListModel<>();
+        ArrayList<String> prestecsAMostrar;
+
+        if (mostrantNomésPendents) {
+            prestecsAMostrar = adaptador.recuperaPrestecsNoRetornats();
+        } else {
+            prestecsAMostrar = adaptador.recuperaPrestecs();
         }
 
-        llistaPrestecs.setModel(llista);
+        if (prestecsAMostrar != null) {
+            for (String p : prestecsAMostrar) {
+                llistaModel.addElement(p);
+            }
+        }
+        llistaPrestecs.setModel(llistaModel);
     }
 }

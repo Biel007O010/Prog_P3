@@ -41,7 +41,6 @@ public class AppBiblioUB extends JFrame {
             }
         });
 
-
         gestioPrestecsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -49,7 +48,6 @@ public class AppBiblioUB extends JFrame {
                 finestraPrestecs.setVisible(true);
             }
         });
-
 
         guardarButton.addActionListener(new ActionListener() {
             @Override
@@ -79,7 +77,6 @@ public class AppBiblioUB extends JFrame {
                 }
             }
         });
-
 
         carregarButton.addActionListener(new ActionListener() {
             @Override

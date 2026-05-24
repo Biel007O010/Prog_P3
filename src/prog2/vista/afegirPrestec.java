@@ -21,7 +21,6 @@ public class afegirPrestec extends JDialog {
         super(f);
         this.adaptador = a;
         this.finestraAnterior = f;
-
         setTitle("Afegir Nou Préstec");
         setContentPane(panellAfegirPrestec);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -54,7 +53,6 @@ public class afegirPrestec extends JDialog {
                 }
 
                 try {
-
                     adaptador.afegirPrestec(exemplarPos, userPos, esLlarg);
 
                     if (afegirPrestec.this.finestraAnterior != null) {
