@@ -21,7 +21,7 @@ public class gestioUsuarisFinestra extends JFrame{
         setTitle("Gestió dels Usuaris");
         setContentPane(panellGestioUsuaris); //
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(400, 300);
+        setSize(700, 300);
         setLocationRelativeTo(null);
 
         actualitzaUsuaris();
