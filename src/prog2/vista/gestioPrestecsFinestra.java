@@ -22,7 +22,7 @@ public class gestioPrestecsFinestra extends JFrame {
     public gestioPrestecsFinestra(Adaptador a) {
         this.adaptador = a;
 
-        setTitle("Gestió de Préstecs - Biblioteca UB");
+        setTitle("Gestió de Préstecs");
         setContentPane(panellGestioPrestecs);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(600, 450);
