@@ -47,30 +47,9 @@ public class gestioPrestecsFinestra extends JFrame{
         retornarPrestecButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int prestecSeleccionat = llistaPrestecs.getSelectedIndex();
-
-                if (prestecSeleccionat == -1) {
-                    JOptionPane.showMessageDialog(gestioPrestecsFinestra.this,
-                            "Si us plau, selecciona un préstec de la llista per retornar-lo.",
-                            "Avís",
-                            JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-                try {
-                    adaptador.retornarPrestec(prestecSeleccionat);
-                    actualitzaPrestecs();
-
-                    JOptionPane.showMessageDialog(gestioPrestecsFinestra.this,
-                            "Préstec retornat correctament.",
-                            "Èxito",
-                            JOptionPane.INFORMATION_MESSAGE);
-
-                } catch (BiblioException ex) {
-                    JOptionPane.showMessageDialog(gestioPrestecsFinestra.this,
-                            ex.getMessage(),
-                            "Error al retornar",
-                            JOptionPane.ERROR_MESSAGE);
-                }
+                retornarPrestecFinestra finestraRetorn = new retornarPrestecFinestra(adaptador, gestioPrestecsFinestra.this);
+                finestraRetorn.setVisible(true);
+                actualitzaPrestecs();
             }
         });
     }
