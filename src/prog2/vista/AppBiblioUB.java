@@ -45,7 +45,8 @@ public class AppBiblioUB extends JFrame {
         gestioPrestecsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                gestioPrestecsFinestra finestraPrestecs = new gestioPrestecsFinestra(adaptador);
+                finestraPrestecs.setVisible(true);
             }
         });
 
