@@ -24,7 +24,7 @@ public class LlistaUsuaris extends Llista<Usuari> implements Serializable {
             while(itr.hasNext()){
                 Usuari temp = itr.next();
                 if(temp.getEmail().equals(user.getEmail())){
-                    throw new BiblioException("No es pot afegir dos exemplars amb el mateix Id");
+                    throw new BiblioException("No es pot afegir dos usuaris amb el mateix correu");
                 }
             }
             llista.add(user);
